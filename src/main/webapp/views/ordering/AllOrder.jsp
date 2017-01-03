@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <link rel="stylesheet" type="text/css" media="all" href="<c:url value="/resources/style.css"/>">
@@ -42,78 +43,38 @@
 <script type="text/javascript" src="/resources/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="/resources/js/jquery.tweetable.js"></script>
 <script type="text/javascript" src="/resources/js/swfobject.js"></script>
+<script type="text/javascript" src="/resources/js/bootbox.min.js"></script>
 
 
-<div id="header" class="group">
 
-    <div class="inner group">
+<body class="responsive boxed-layout yes_js">
 
-        <div id="logo" class="group">
-            <a href="/" title="YarShop">
-                <span class="logo-title"> YarShop</span>
-            </a>
+<div class="wrapper group">
+    <div class="bgWrapper group">
+        <div id="sliderer" class="thumbnails group inner">
+            <div id="primary" class="inner group">
 
-        </div>
+                <c:forEach items="${order}" var="a">
 
-        <ul id="linksbar" class="group">
-            <sec:authorize access="hasRole('USER')">
-                <li class="icon cart">
-                    <a class="trigger" href="/productCard">
-                        <span>  items  </span>
-                    </a> |
-                    <div class="basketpopup">
+
+                    <div style="font-size: 20px; text-align: center; width: 940px; height: auto; background-color: gainsboro; color: #101010; float: left;margin-top: 15px;  border: 5px double black; border-radius: 0px;">
+                        <p style="font-size: 20px;">${a.customer}</p>
+                        <p style="font-size: 20px;">${a.productList}</p>
+                        <p style="font-size: 20px;"> Дата ${a.date}</p>
+                        <p style="font-size: 20px;">Сума ${a.sum}</p>
+                        <sec:authorize access="hasRole('ADMIN')">
+                            <form:form action="/order/delete/${a.id_order}" method="post">
+                                <button type="submit">Видалити</button>
+                            </form:form>
+                        </sec:authorize>
                     </div>
 
-                </li>
-            </sec:authorize>
 
-            <li class="icon lock">
-                <sec:authorize access="isAnonymous()">
-                    <a href="/loginpage">Login</a> |
-                </sec:authorize>
-                <sec:authorize access="isAuthenticated()">
-                    <form:form method="post" action="/logout">
-                        <button type="submit" style="margin-top: 8px">Logout</button>
-                    </form:form>
-                </sec:authorize>
-            </li>
+                </c:forEach>
 
-            <li><a href="/contact">Contact us</a> |</li>
-        </ul>
-
-
-        <div class="clear"></div>
-
-
-        <div id="nav" class="group creative">
-            <ul id="menu-navigation" class="level-1">
-
-                <li><a href="/">Home</a></li>
-                <li><a href="/allProduct">Shop</a></li>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <li><a href="/newProduct">Add Product</a></li>
-                </sec:authorize>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <li><a href="/AllOrder">All Orders</a></li>
-                </sec:authorize>
-                <sec:authorize access="hasRole('USER')">
-                    <li><a href="/productCard">Items</a></li>
-                </sec:authorize>
-
-            </ul>
-        </div>
-
-        <form:form id="searchform" action="/search" method="post">
-            <div>
-                <input type="text" value="" name="name_product" placeholder="Введіть назву товару" id="s">
-                <input type="submit" id="searchsubmit" value="Пошук">
             </div>
-        </form:form>
-
-
+        </div>
     </div>
-
-
 </div>
-
+</body>
 

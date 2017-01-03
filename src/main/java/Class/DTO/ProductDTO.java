@@ -2,9 +2,6 @@ package Class.DTO;
 
 import javax.persistence.Column;
 
-/**
- * Created by Ярослав on 24.12.2016.
- */
 public class ProductDTO {
     private int id_product;
 

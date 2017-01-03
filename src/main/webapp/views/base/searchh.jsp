@@ -63,40 +63,45 @@
             <div id="primary" class="inner group">
                 <div class="boxed-content group">
                     <div class="box-content group">
-                        <ul class="products">
-                            <c:forEach items="${product}" var="a">
-                                <li class="product border shadow">
-                                    <a>
-                                        <img width="150" height="150"
-                                             src="data:image/jpeg;base64,${a.image}"
-                                             class="attachment-shop_small wp-post-image">
-                                        <strong class="below-thumb"><p>${a.name_product}</p>
-                                            <span class="price"> <p>${a.price_product} грн.</p></span>
-                                        </strong>
-                                    </a>
-
-                                    <div class="buttons">
-                                        <a href="/productPage/${a.id_product}"
-                                           class="details">Більше</a>&nbsp;
-                                        <sec:authorize access="hasRole('USER')"><button type="button" class="add-to-cart" onclick="addToCard(${a.getId_product()})">
-                                            Add to cart
-                                        </button> </sec:authorize>
-                                    </div>
-
+                        <div style="height: 100%">
+                            <ul class="products">
+                                <c:forEach items="${product}" var="a">
+                                    <li class="product border shadow">
+                                        <a>
+                                            <img width="150" height="150"
+                                                 src="data:image/jpeg;base64,${a.image}"
+                                                 class="attachment-shop_small wp-post-image">
+                                            <strong class="below-thumb"><p>${a.name_product}</p>
+                                                <span class="price"> <p>${a.price_product} грн.</p></span>
+                                            </strong>
+                                        </a>
+                                        <div class="buttons">
+                                            <a href="/productPage/${a.id_product}"
+                                               class="details">Більше</a>&nbsp;
+                                            <sec:authorize access="hasRole('USER')">
+                                                <button type="button" class="add-to-cart"
+                                                        onclick="addToCard(${a.getId_product()})">
+                                                    Add to cart
+                                                </button>
+                                            </sec:authorize>
+                                        </div>
                                         <sec:authorize access="hasRole('ADMIN')">
-                                    <div class="buttons">
-                                        <a href="/productEdit/${a.id_product}"
-                                           class="details">Редагувати</a>
-                                        <form:form action="/product/delete/${a.id_product}"
-                                                   method="post">
-                                            <button type="submit">Видалити</button>
-                                        </form:form>
-                                    </div>
+                                            <div class="buttons">
+                                                <a href="/productEdit/${a.id_product}"
+                                                   class="details">Редагувати</a>
+                                                <form:form action="/product/delete/${a.id_product}"
+                                                           method="post">
+                                                    <button type="submit">Видалити</button>
+                                                </form:form>
+                                            </div>
                                         </sec:authorize>
-                                </li>
-                            </c:forEach>
+                                    </li>
+                                </c:forEach>
 
-                        </ul>
+                                <p style="font-size: 23px; text-align: center;float: inherit;">${error} </p>
+
+                            </ul>
+                        </div>
                         <div class="clear"></div>
                     </div>
                 </div>

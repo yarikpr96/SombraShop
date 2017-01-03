@@ -15,27 +15,37 @@ public class ProductDAOImp implements ProductDAO {
     @PersistenceContext(unitName = "Main")
     private EntityManager entityManager;
 
+    @Override
     @Transactional
     public void addProduct(Product product) {
         entityManager.persist(product);
 
     }
+
+    @Override
     @Transactional
     public void editProduct(Product product) {
         entityManager.merge(product);
 
     }
+
     @Transactional
     public void deleteProduct(Product product) {
         entityManager.remove(entityManager.contains(product) ? product : entityManager.merge(product));
 
     }
+
+    @Override
     @Transactional
     public Product findOneById(int id_product) {
-        return entityManager.find(Product.class,id_product);
+        return entityManager.find(Product.class, id_product);
     }
+
+    @Override
     @Transactional
     public List<Product> findAll() {
         return entityManager.createQuery("from Product ").getResultList();
     }
+
+
 }

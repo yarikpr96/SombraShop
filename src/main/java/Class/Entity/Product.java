@@ -21,11 +21,19 @@ public class Product {
     @Lob
     private byte [] image = new byte[1];
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "product_ordering", joinColumns = @JoinColumn(name = "id_product"), inverseJoinColumns = @JoinColumn(name = "id_order"))
     List<Ordering> orderingList;
 
     public Product() {
+    }
+
+    public Product(String name_product, String brand, double price_product, String description_product, byte[] image) {
+        this.name_product = name_product;
+        this.brand = brand;
+        this.price_product = price_product;
+        this.description_product = description_product;
+        this.image = image;
     }
 
     public byte[] getImage() {
@@ -82,5 +90,15 @@ public class Product {
 
     public void setOrderingList(List<Ordering> orderingList) {
         this.orderingList = orderingList;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+
+                ", name_product='" + name_product + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price_product=" + price_product +
+                '}';
     }
 }

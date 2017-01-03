@@ -1,23 +1,25 @@
 package Class.Controllers;
 
+import Class.DTO.ProductDTO;
 import Class.Entity.Customer;
-import Class.Entity.Ordering;
-import Class.Entity.Product;
-
+import Class.Send.Mail;
 import Class.Services.CustomerSer;
 import Class.Services.OrderingSer;
 import Class.Services.ProductSer;
-;
+import Class.Validations.CustomersVal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Controller
 public class BaseController {
@@ -29,93 +31,82 @@ public class BaseController {
     private CustomerSer customerSer;
     @Autowired
     private OrderingSer orderingSer;
+    @Autowired
+    private CustomersVal customersVal;
 
-
+    //початкова сторінка
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private String home() {
         return "views-base-home";
     }
 
-
-    @RequestMapping(value = "/allProduct", method = RequestMethod.GET)
-    private String allProduct(Model model) {
-        List<Product> productList = productSer.findAll();
-        model.addAttribute("product", productList);
-        return "views-product-allProduct";
-
-
+    // метод гет для зворотнього зв’язку
+    @RequestMapping(value = "/contact", method = RequestMethod.GET)
+    private String contact() {
+        return "views-base-contact";
     }
 
-    @RequestMapping(value = "/newProduct", method = RequestMethod.GET)
-    private String createNewProduct() {
-        return "views-product-newProduct";
+    //зворотній зв’язок
+    @RequestMapping(value = "/contact", method = RequestMethod.POST)
+    private String contact(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("message") String message) {
+        Mail mailSender = new Mail("super.photo-art1@yandex.ru", "qweqweqwe123");
+        mailSender.send("У вас лист від " + name, email + " " + message, "super.photo-art1@yandex.ru", "yaroslav0396@ukr.net");
+        return "redirect:/";
     }
 
+    //login
+    @RequestMapping(value = "/loginpage", method = RequestMethod.GET)
+    public String login() {
+        return "views-base-login";
+    }
 
-    @RequestMapping(value = "/newProduct", method = RequestMethod.POST)
-    public String createProduct(@RequestParam(value = "name_product") String name_product,
-                                @RequestParam(value = "brand") String brand,
-                                @RequestParam(value = "price_product") double price_product,
-                                @RequestParam(value = "description_product") String description_product,
-                                @RequestParam("image") MultipartFile multipartFile) {
-        Product product = new Product();
-        product.setName_product(name_product);
-        product.setBrand(brand);
-        product.setPrice_product(price_product);
-        product.setDescription_product(description_product);
-        try {
-            product.setImage(multipartFile.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+    //registration get
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    public String registration(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "views-base-registration";
+    }
+
+    //registration post
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String registration(@ModelAttribute Customer customer, BindingResult bindingResult) {
+        customersVal.validate(customer, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "views-base-registration";
+        } else {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            customer.setPassword(bCryptPasswordEncoder.encode(customer.getPassword()));
+            customerSer.add(customer);
+            return "redirect:/";
         }
-        productSer.add(product);
-        return "redirect:/allProduct";
     }
 
-//    @RequestMapping(value = "/newProduct", method = RequestMethod.POST)
-//    public String createProduct(@ModelAttribute Product product) {
-//        productSer.add(product);
-//        return "redirect:/allProduct";
-//    }
+    //search get
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    private String searchh() {
+        return "views-base-searchh";
+    }
+
+    //search post
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String search(Model model, @RequestParam("name_product") String name_product) {
+        List<ProductDTO> productDTOList = productSer.findAllDto();
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        String error = "Такого продукта не існує";
+        for (ProductDTO dto : productDTOList) {
+            if (dto.getName_product().equals(name_product)) {
+                productDTOs.add(dto);
+            }
+        }
+        if (productDTOs.isEmpty()) {
+            model.addAttribute("error", error);
+        } else {
+            model.addAttribute("product", productDTOs);
+        }
 
 
-//
-//    @RequestMapping(value = "/loginpage", method = RequestMethod.GET)
-//    public String login() {
-//        return "login";
-//    }
-//
-//    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-//    public String registration(Model model) {
-//        model.addAttribute("customer", new Customer());
-//        return "registration";
-//    }
-//
-//    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-//    public String registration(@ModelAttribute Customer customer) {
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//        customer.setPassword(bCryptPasswordEncoder.encode(customer.getPassword()));
-//        customerSer.add(customer);
-//        return "redirect:/";
-//    }
-//
-//
-//
-//    @RequestMapping(value = "/productEdit/{id_product}", method = RequestMethod.GET)
-//    public String dit(@PathVariable String id_product, Model model){
-//        model.addAttribute("product",productSer.findOneById(Integer.parseInt(id_product)));
-//        return "productEdit";
-//    }
-//
-//    @RequestMapping(value = "/productEdit", method = RequestMethod.POST)
-//    public String edit(@ModelAttribute Product product){
-//        productSer.adit(product);
-//        return "redirect:/allProduct";
-//    }
-//
-//    @RequestMapping(value = "/product/delete/{id_product}", method = RequestMethod.POST)
-//    public String delete(@PathVariable String id_product){
-//        productSer.delete(Integer.parseInt(id_product));
-//        return "redirect:/allProduct";
-//    }
+        return "views-base-searchh";
+    }
+
+
 }

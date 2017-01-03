@@ -632,10 +632,10 @@ input.button:hover,
 .button-alt:hover {
   background: #0588b5;
 }
-form.cart .button-alt {
-    font-size: 14px;
-    margin-top: 0;
-    padding: 8px 12px;
+/*form.cart .button-alt {*/
+    /*font-size: 14px;*/
+    /*margin-top: 0;*/
+    /*padding: 8px 12px;*/
 }
 a.button, button.button, input.button, #review_form #submit, .button-alt {
     background: #fff url('images/bg/bg-add-cart.png') bottom left repeat-x;

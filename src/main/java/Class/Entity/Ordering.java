@@ -1,6 +1,7 @@
 package Class.Entity;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,21 +12,24 @@ public class Ordering {
     @Column
     private int id_order;
     @Column
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column
+    private double sum;
+    @ManyToOne(fetch = FetchType.EAGER)
     Customer customer;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "product_ordering", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_product"))
     List<Product> productList;
 
     public Ordering() {
+        this.date = Calendar.getInstance().getTime();
     }
 
-    public Ordering(Date date) {
+    public Ordering(Date date, double sum, Customer customer) {
         this.date = date;
-
+        this.sum = sum;
+        this.customer = customer;
     }
 
     public int getId_order() {
@@ -44,6 +48,13 @@ public class Ordering {
         this.date = date;
     }
 
+    public double getSum() {
+        return sum;
+    }
+
+    public void setSum(double sum) {
+        this.sum = sum;
+    }
 
     public Customer getCustomer() {
         return customer;
@@ -64,8 +75,10 @@ public class Ordering {
     @Override
     public String toString() {
         return "Ordering{" +
-                "id_order=" + id_order +
+
                 ", date=" + date +
+                ", sum=" + sum +
+                ", customer=" + customer +
                 '}';
     }
 }

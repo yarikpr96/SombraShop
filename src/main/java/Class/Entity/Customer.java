@@ -10,27 +10,38 @@ public class Customer {
     @Column
     private int id_customer;
     @Column(nullable = false)
-    private String name ;
+    private String name;
     @Column(nullable = false)
     private String surname;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String mobile_phone;
     @Column(nullable = false)
-    private String password ;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer")
-    List<Ordering>orderingList ;
+    private String password;
+    @Transient
+    private String passwordConfirm;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
+    List<Ordering> orderingList;
 
     public Customer() {
     }
 
-    public Customer(String name, String surname, String email, String mobile_phone, String password) {
+    public Customer(String name, String surname, String email, String mobile_phone, String password, String passwordConfirm) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.mobile_phone = mobile_phone;
         this.password = password;
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
     public int getId_customer() {
@@ -81,4 +92,13 @@ public class Customer {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", mobile_phone='" + mobile_phone + '\'' +
+                '}';
+    }
 }

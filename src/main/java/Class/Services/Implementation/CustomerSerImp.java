@@ -16,11 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
-
-
-
-
 @Service
 public class CustomerSerImp implements CustomerSer, UserDetailsService {
     @Autowired
@@ -36,7 +31,7 @@ public class CustomerSerImp implements CustomerSer, UserDetailsService {
         customerDAO.addCustomer(customer);
     }
 
-    public void adit(int id_customer, String name, String surname, String email, String mobile_phone,String  password) {
+    public void edit(int id_customer, String name, String surname, String email, String mobile_phone,String  password) {
         Customer customer = customerDAO.findOneById(id_customer);
         if (name != null) {
             customer.setName(name);

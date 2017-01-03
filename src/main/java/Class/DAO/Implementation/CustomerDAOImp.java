@@ -26,7 +26,7 @@ public class CustomerDAOImp implements CustomerDAO {
 
     @Transactional
     public void deleteCustomer(Customer customer) {
-        entityManager.remove(customer);
+        entityManager.remove(entityManager.contains(customer) ? customer : entityManager.merge(customer));
 
     }
 

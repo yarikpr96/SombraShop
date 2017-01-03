@@ -1,7 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <link rel="stylesheet" type="text/css" media="all" href="<c:url value="/resources/style.css"/>">
 <link rel="stylesheet" type="text/css" media="screen and (max-width: 980px)" href="/resources/css/lessthen980.css">
@@ -42,78 +43,72 @@
 <script type="text/javascript" src="/resources/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="/resources/js/jquery.tweetable.js"></script>
 <script type="text/javascript" src="/resources/js/swfobject.js"></script>
+<script type="text/javascript" src="/resources/js/bootbox.min.js"></script>
 
 
-<div id="header" class="group">
 
-    <div class="inner group">
 
-        <div id="logo" class="group">
-            <a href="/" title="YarShop">
-                <span class="logo-title"> YarShop</span>
-            </a>
+<script type="text/javascript">
+    function delFromCard(ItemId) {
+        $.get("/delFromCard", {id_product: ItemId}, onRemoveFromCard);
+        function onRemoveFromCard() {
+            location.reload();
 
-        </div>
+        }
+    }
+</script>
+<body class="responsive boxed-layout yes_js">
 
-        <ul id="linksbar" class="group">
-            <sec:authorize access="hasRole('USER')">
-                <li class="icon cart">
-                    <a class="trigger" href="/productCard">
-                        <span>  items  </span>
-                    </a> |
-                    <div class="basketpopup">
+<div class="wrapper group">
+    <div class="bgWrapper group">
+        <div id="sliderer" class="thumbnails group inner">
+            <div id="primary" class="inner group">
+                <div class="boxed-content group">
+
+
+                    <div style="height: 120%;overflow: auto;">
+
+                        <p style="font-size: 23px; text-align: center; float: inherit">Замовлення</p>
+                        <c:forEach items="${products}" var="a">
+
+                            <div style="font-size: 23px;  width: 950px; height: auto; background-color: gainsboro; color: #101010;   border: 2px double black; border-radius: 0px;">
+                                    <%--<form:form action="/productCardDel/${a.id_product}" method="post">--%>
+                                <a style="font-size: 23px;">${a.name_product} - ${a.price_product} грн.
+
+
+                                        <%--<button style="float: right" type="submit">Видалити</button>--%>
+                                    <button type="button" style="float: right"
+                                            onclick="delFromCard(${a.getId_product()})">Remove
+                                    </button>
+                                        <%--</form:form>--%>
+                                </a>
+
+
+                            </div>
+
+
+                        </c:forEach>
+
+
+                        <div style="font-size: 20px; text-align: center; width: 950px; height: auto; background-color: lightgreen; color: #101010; float: inherit;  border: 2px double black; border-radius: 0px;">
+                            <p style="font-size: 23px; text-align: center;float: inherit;"> Сума замовлення ${price}
+                            грн.</p>
+
+                            <form:form action="/order" method="post">
+                                <p style="font-size: 23px; text-align: center;float: inherit;">
+                                    <input style="font-size: 23px;" id="submit" type="submit" value="Замовити">
+                                </p>
+                            </form:form>
+                            <form:form action="/productCardDell" method="post">
+                                <button type="submit"> Очистити список</button>
+                            </form:form>
+                        </div>
+
+
                     </div>
-
-                </li>
-            </sec:authorize>
-
-            <li class="icon lock">
-                <sec:authorize access="isAnonymous()">
-                    <a href="/loginpage">Login</a> |
-                </sec:authorize>
-                <sec:authorize access="isAuthenticated()">
-                    <form:form method="post" action="/logout">
-                        <button type="submit" style="margin-top: 8px">Logout</button>
-                    </form:form>
-                </sec:authorize>
-            </li>
-
-            <li><a href="/contact">Contact us</a> |</li>
-        </ul>
-
-
-        <div class="clear"></div>
-
-
-        <div id="nav" class="group creative">
-            <ul id="menu-navigation" class="level-1">
-
-                <li><a href="/">Home</a></li>
-                <li><a href="/allProduct">Shop</a></li>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <li><a href="/newProduct">Add Product</a></li>
-                </sec:authorize>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <li><a href="/AllOrder">All Orders</a></li>
-                </sec:authorize>
-                <sec:authorize access="hasRole('USER')">
-                    <li><a href="/productCard">Items</a></li>
-                </sec:authorize>
-
-            </ul>
-        </div>
-
-        <form:form id="searchform" action="/search" method="post">
-            <div>
-                <input type="text" value="" name="name_product" placeholder="Введіть назву товару" id="s">
-                <input type="submit" id="searchsubmit" value="Пошук">
+                </div>
             </div>
-        </form:form>
-
-
+        </div>
     </div>
-
-
 </div>
-
-
+</body>

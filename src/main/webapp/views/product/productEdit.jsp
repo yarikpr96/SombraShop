@@ -1,6 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <link rel="stylesheet" type="text/css" media="all" href="<c:url value="/resources/style.css"/>">
@@ -42,78 +41,83 @@
 <script type="text/javascript" src="/resources/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="/resources/js/jquery.tweetable.js"></script>
 <script type="text/javascript" src="/resources/js/swfobject.js"></script>
+<script type="text/javascript" src="/resources/js/bootbox.min.js"></script>
 
 
-<div id="header" class="group">
+<body class="responsive boxed-layout yes_js">
 
-    <div class="inner group">
+<div class="wrapper group">
+    <div class="bgWrapper group">
+        <div id="sliderer" class="thumbnails group inner">
+            <div id="primary" class="inner group">
+                <div style="height: 100%">
+                    <div id="tooplate_wrapper4">
+                        <form action="/productEdit?${_csrf.parameterName}=${_csrf.token}" method="post"
+                              enctype="multipart/form-data">
 
-        <div id="logo" class="group">
-            <a href="/" title="YarShop">
-                <span class="logo-title"> YarShop</span>
-            </a>
+                            <table cellpadding="5px">
 
-        </div>
 
-        <ul id="linksbar" class="group">
-            <sec:authorize access="hasRole('USER')">
-                <li class="icon cart">
-                    <a class="trigger" href="/productCard">
-                        <span>  items  </span>
-                    </a> |
-                    <div class="basketpopup">
+                                    <td align="left">
+                                        <input type="HIDDEN" name="id_product" value="${product.id_product}">
+                                    </td>
+
+                                <tr>
+                                    <td align="right">
+                                        Назва:
+                                    </td>
+                                    <td align="left">
+                                        <input type="text" name="name_product" value="${product.name_product}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        Бренд:
+                                    </td>
+                                    <td align="left">
+                                        <input type="text" name="brand" value="${product.brand}">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        Опис:
+                                    </td>
+                                    <td align="left">
+                                        <textarea name="description_product">${product.description_product}</textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        Ціна:
+                                    </td>
+                                    <td align="left">
+                                        <input type="number" name="price_product" value="${product.price_product}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        Зображення:
+                                    </td>
+                                    <td align="left">
+                                        <input type="file" name="image">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td align="left">
+                                        <button type="submit">Редагувати</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
-
-                </li>
-            </sec:authorize>
-
-            <li class="icon lock">
-                <sec:authorize access="isAnonymous()">
-                    <a href="/loginpage">Login</a> |
-                </sec:authorize>
-                <sec:authorize access="isAuthenticated()">
-                    <form:form method="post" action="/logout">
-                        <button type="submit" style="margin-top: 8px">Logout</button>
-                    </form:form>
-                </sec:authorize>
-            </li>
-
-            <li><a href="/contact">Contact us</a> |</li>
-        </ul>
-
-
-        <div class="clear"></div>
-
-
-        <div id="nav" class="group creative">
-            <ul id="menu-navigation" class="level-1">
-
-                <li><a href="/">Home</a></li>
-                <li><a href="/allProduct">Shop</a></li>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <li><a href="/newProduct">Add Product</a></li>
-                </sec:authorize>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <li><a href="/AllOrder">All Orders</a></li>
-                </sec:authorize>
-                <sec:authorize access="hasRole('USER')">
-                    <li><a href="/productCard">Items</a></li>
-                </sec:authorize>
-
-            </ul>
-        </div>
-
-        <form:form id="searchform" action="/search" method="post">
-            <div>
-                <input type="text" value="" name="name_product" placeholder="Введіть назву товару" id="s">
-                <input type="submit" id="searchsubmit" value="Пошук">
+                </div>
             </div>
-        </form:form>
-
-
+        </div>
     </div>
-
-
 </div>
-
-
+</body>
