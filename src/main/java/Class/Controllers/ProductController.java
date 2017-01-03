@@ -28,7 +28,7 @@ public class ProductController {
     @Autowired
     private OrderingSer orderingSer;
 
-//Всі продукти
+//All product
     @RequestMapping(value = "/allProduct", method = RequestMethod.GET)
     private String allProduct(Model model) {
         List<ProductDTO> productList = productSer.findAllDto();
@@ -37,13 +37,13 @@ public class ProductController {
 
 
     }
-// додати продукт гет
+// Add product Get
     @RequestMapping(value = "/newProduct", method = RequestMethod.GET)
     private String createNewProduct() {
         return "views-product-newProduct";
     }
 
-    // додати продукт пост
+    // Add product Post
     @RequestMapping(value = "/newProduct", method = RequestMethod.POST)
     public String createProduct(@RequestParam(value = "name_product") String name_product,
                                 @RequestParam(value = "brand") String brand,
@@ -63,13 +63,13 @@ public class ProductController {
         productSer.add(product);
         return "redirect:/allProduct";
     }
-    // змінити продукт гет
+    //Edit  product get
     @RequestMapping(value = "/productEdit/{id_product}", method = RequestMethod.GET)
     public String dit(@PathVariable String id_product, Model model) {
         model.addAttribute("product", productSer.findOneById(Integer.parseInt(id_product)));
         return "views-product-productEdit";
     }
-    // змінити продукт пост
+    // Edit  product Post
     @RequestMapping(value = "/productEdit", method = RequestMethod.POST)
     public String edit(@RequestParam(value = "id_product") int id_product,
                        @RequestParam(value = "name_product") String name_product,
@@ -90,20 +90,20 @@ public class ProductController {
         productSer.edit(product);
         return "redirect:/allProduct";
     }
-//вилдалити продукт
+//delete product
     @RequestMapping(value = "/product/delete/{id_product}", method = RequestMethod.POST)
     public String delete(@PathVariable String id_product) {
         productSer.delete(Integer.parseInt(id_product));
         return "redirect:/allProduct";
     }
-//Сторінка з продуктом
+//Page product
     @RequestMapping(value = "/productPage/{id_product}", method = RequestMethod.GET)
     public String productPage(@PathVariable String id_product, Model model) {
         ProductDTO product = productSer.findOne(Integer.parseInt(id_product));
         model.addAttribute("product", product);
         return "views-product-productPage";
     }
-//додати в корзину
+//add to basket
     @RequestMapping(value = "/product/{id_product}", method = RequestMethod.GET)
     public String addToBasket(HttpSession httpSession, @PathVariable String id_product) {
         List<Product> products = (List<Product>) httpSession.getAttribute("products");
@@ -116,7 +116,7 @@ public class ProductController {
         httpSession.setAttribute("products", products);
         return "redirect:/allProduct";
     }
-    //додати в корзину за допомогою ajax
+    //add to basket with ajax
     @RequestMapping(value = "/addToCard", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -132,7 +132,7 @@ public class ProductController {
         return "";
 
     }
-//вивести корзину замовлень
+//All Order Get
     @RequestMapping(value = "/productCard", method = RequestMethod.GET)
     private String addToBasket(HttpSession httpSession, Model model) {
         List<Product> products = (List<Product>) httpSession.getAttribute("products");
@@ -147,14 +147,14 @@ public class ProductController {
         model.addAttribute("products", products);
         return "views-product-productCard";
     }
-//Очистити всю корзину
+//Clear all trash basket
     @RequestMapping(value = "/productCardDell", method = RequestMethod.POST)
     public String dellBasket(HttpSession httpSession) {
         List<Product> products = (List<Product>) httpSession.getAttribute("products");
         httpSession.removeAttribute("products");
         return "redirect:/allProduct";
     }
-    //видалити з корзини
+    //Remove product from basket
 //    @RequestMapping(value = "/productCardDel/{id_product}", method = RequestMethod.POST)
 //    public String dellBasketid(HttpSession httpSession, @PathVariable String id_product) {
 //        List<Product> products = (List<Product>) httpSession.getAttribute( "products" );
@@ -170,7 +170,7 @@ public class ProductController {
 //        }
 //        return "redirect:/productCard";
 //    }
-    //видалити з корзини за допомогою Ajax
+    //Remove product from basket with Ajax
     @RequestMapping(value = "/delFromCard", method = RequestMethod.GET)
     public
     @ResponseBody

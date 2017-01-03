@@ -31,7 +31,7 @@ public class OrderingController {
     private CustomersVal customersVal;
 
 
-    //додати замовлення
+    //Add Order
     @RequestMapping(value = "/order", method = RequestMethod.POST)
     public String addToBasket(HttpSession httpSession, @ModelAttribute Ordering ordering, Principal principal) {
         List<Product> productList = (List<Product>) httpSession.getAttribute("products");
@@ -54,19 +54,19 @@ public class OrderingController {
         }
 
     }
-// маячок який виводиться коли зробили замовлення
+// pages that appears when do order
     @RequestMapping(value = "/oneOrder", method = RequestMethod.GET)
     private String oneOrder() {
         return "views-ordering-oneOrder";
     }
-//Всі замолення
+//All Order
     @RequestMapping(value = "/AllOrder", method = RequestMethod.GET)
     private String oneOrder(Model model) {
         List<Ordering> orderingList = orderingSer.findAll();
         model.addAttribute("order", orderingList);
         return "views-ordering-AllOrder";
     }
-//видалити замовлення
+//delete order
     @RequestMapping(value = "/order/delete/{id_order}", method = RequestMethod.POST)
     public String deleteOrder(@PathVariable String id_order) {
         orderingSer.delete(Integer.parseInt(id_order));

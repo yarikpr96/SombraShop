@@ -34,19 +34,19 @@ public class BaseController {
     @Autowired
     private CustomersVal customersVal;
 
-    //початкова сторінка
+    //starting page
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private String home() {
         return "views-base-home";
     }
 
-    // метод гет для зворотнього зв’язку
+    // Get method for feedback
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     private String contact() {
         return "views-base-contact";
     }
 
-    //зворотній зв’язок
+    //feedback
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     private String contact(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("message") String message) {
         Mail mailSender = new Mail("super.photo-art1@yandex.ru", "qweqweqwe123");
